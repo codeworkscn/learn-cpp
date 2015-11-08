@@ -1,0 +1,25 @@
+2010年10月15日: 文件读写方式有误，修改后可写入，不能读取
+
+2010年10月20日11:42:08 ：尝试使用封装模板库：common_server_per.h
+
+template <class I, class V>
+class common_server
+{
+
+}
+
+2011-2-21 13:11:56：测试自定义异常，可用
+
+
+common_server_per.h:
+
+	2011-2-25 11:14:18	cxw尝试修改模板，使得能支持多个Servant对象
+	2011-3-1 15:06:18	调试成功
+	2011-3-7 10:14:24	定稿V1.0
+	
+	
+2011-3-7 common_server_per.h 修改文件名称为 SGRDC_common_server_class.h
+
+2011-4-5 服务程序改为 Windows NTService 方式
+
+2011-4-11 SGRDC_common_server_class.h继承FileLoggger类

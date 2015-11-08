@@ -1,0 +1,26 @@
+
+
+module SERVICEOBJ
+{
+	interface A
+	{
+		void opetater_a();
+	};
+
+	interface B
+	{		
+		void opetater_b();
+	};
+	
+	interface CallBack
+	{
+		void opetater_callBack(in string message_);
+	};
+	
+	interface AB
+	{
+		attribute A a_;
+		attribute B b_;
+		void opetater_setCallBack(in CallBack callback_);
+	};
+};

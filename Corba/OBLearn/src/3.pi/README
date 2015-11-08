@@ -1,0 +1,74 @@
+The Portable Interceptor Demo
+=============================
+
+Introduction
+~~~~~~~~~~~~
+This is an example demonstrating Portable Interceptors.  Client-side and
+server-side Request Interceptors are used to log client-server interactions
+to the screen.
+
+The PIDemo Interface
+~~~~~~~~~~~~~~~~~~~~
+To demonstrate client-side and server-side Request Interceptors the PIDemo
+interface is defined.  The PIDemo interface is implemented by two servants,
+one using the static skeleton and the other using the Dynamic Skeleton
+Interface.
+
+The client first obtains a reference to a PIDemo object that is implemented
+by the static servant.  Using this reference, the client may obtain a
+reference to the object implemented by the dynamic servant using
+PIDemo::switch_to_dynamic_impl(), which triggers a LOCATION_FORWARD
+message.  Similarly, invoking PIDemo::switch_to_static_impl() on the object
+implemented by the dynamic servant results in a LOCATION_FORWARD message
+containing the reference corresponding to the static servant.
+LOCATION_FORWARD messages are handled by a ServantLocator that is
+registered by the server.  (Note that using a ServantLocator is not
+required when using Portable Interceptors.  The ServantLocator is only used
+in this demo as a means to generate the appropriate LOCATION_FORWARD
+messages.)
+
+The PIDemo::systemexception() and PIDemo::userexception() operations result
+in a CORBA::SystemException and a PIDemo::User exception, respectively.
+
+The LoggerPolicy Interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+The LoggerPolicy interface is defined to enable logging and to set the
+logging level for the client-side and server-side Request Interceptors.  To
+use a LoggerPolicy object, the LoggerPolicyFactory must be registered.
+This is done by the RIORBInitializer_impl class.  The RIORBInitializer_impl
+class is also responsible for registering the Portable Interceptors.
+
+To enable client-side logging, an object reference must be created with a
+policy set containing the logging policy.  The client creates two
+references to the PIDemo object, one without the logging policy and another
+with the logging policy.
+
+To enable server-side logging, servants must be registered with a POA that
+was created with the logging policy.
+
+The CallStack Interface
+~~~~~~~~~~~~~~~~~~~~~~~
+The CallStack interface is defined to demonstrate Request Service Contexts
+and the slot data of the Portable Interceptor Current object.  A CallStack
+objects is a sequence of strings which represent the outgoing call stack
+for operations on the PIDemo interface.
+
+At the client-side send_request interception point, if a CallStack is
+present in the Portable Interceptor Current object's slot data, then it is
+added to the Request Service Context.  At the server-side
+receive_request_service_contexts interception point, the CallStack is
+extracted from the Request Service Context (if present), the call is added
+to the CallStack, and the modified CallStack is added to the Portable
+Interceptor Current object's slot data.
+
+The PIDemo::call_other_impl() operation exists to demonstrate the above for
+nested calls.
+
+Running the demo
+~~~~~~~~~~~~~~~~
+To run the demo, start the server executable, followed by the client
+executable in this directory.  Both the server and client take an optional
+parameter to set the logging level.  The default logging level is 1. After
+starting the client, a menu will be displayed which presents the commands
+to enable/disable logging (initially enabled), to quit the client and
+shutdown the server, and to invoke various methods on the PIDemo object.
